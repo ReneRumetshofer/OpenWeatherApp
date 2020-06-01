@@ -2,7 +2,7 @@
 
 OpenWeather App is an weather application utilizing the [OpenWeatherMap](https://openweathermap.org/)
 
-![OpenWeather App](application_screenshot.png)
+![OpenWeather App](https://user-images.githubusercontent.com/51208355/83449030-32d0b180-a453-11ea-9a72-f4a30b955d64.png)
 
 ## Getting Started
 
