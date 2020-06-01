@@ -2,6 +2,9 @@
 
 OpenWeather App is an weather application utilizing the [OpenWeatherMap](https://openweathermap.org/)
 
+![OpenWeather App](/application_screenshot.png)
+Format: ![OpenWeather App screenshot](url)
+
 ## Getting Started
 
 For receiving weather data in the application you need to sign up at [OpenWeatherMap](https://openweathermap.org/)
@@ -13,7 +16,7 @@ OpenWeather App requires .NET framework version 4.8
 
 ### Obtaining the application
 
-You can compile the application yourself (project for VisualStudio version 16 is provided) or use the "STABLE_1.0.0" release.
+You can compile the application yourself (project for VisualStudio version 16 is provided) or use the "STABLE_1.0.0" release for x64.
 
 ## License
 
