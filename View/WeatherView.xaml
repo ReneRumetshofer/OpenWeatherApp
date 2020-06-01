@@ -6,109 +6,129 @@
         xmlns:src="clr-namespace:WeatherAPITest.ViewModel"
         xmlns:local="clr-namespace:WeatherAPITest.View"
         mc:Ignorable="d"
-        Title="WeatherView" Height="450" Width="800">
+        Title="WeatherView" Height="450" Width="850">
     <Window.DataContext>
         <src:WeatherViewModel/>
     </Window.DataContext>
     <StackPanel>
-        <StackPanel Orientation="Horizontal">
-            <Label>Latitude:</Label>
-            <Label Content="{Binding Model.Latitude}"/>
-            <Label Margin="20, 0, 0, 0">Longitude:</Label>
-            <Label Content="{Binding Model.Longitude}"/>
-            <Label Margin="20, 0, 0, 0">Name:</Label>
-            <Label Content="{Binding Model.Name}"/>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <Label>City name:</Label>
+            <TextBox Text="{Binding CityName}" MinWidth="180" Height="20" VerticalContentAlignment="Center"/>
             <Label Margin="20, 0, 0, 0">Country tag:</Label>
-            <Label Content="{Binding Model.CountryTag}"/>
-            <Label Margin="20, 0, 0, 0">City ID:</Label>
-            <Label Content="{Binding Model.CityID}"/>
+            <TextBox Text="{Binding CountryTag}" MinWidth="180" Height="20" VerticalContentAlignment="Center"/>
+            <Button Margin="20, 0, 0, 0" Content="Load" Command="{Binding LoadCommand}"/>
+            <Label Margin="20, 0, 0, 0" Content="{Binding ErrorText}" IsEnabled="{Binding ErrorTextEnabled}" Foreground="Red"/>
         </StackPanel>
 
-        <Grid Margin="0, 15, 0, 0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="5*"/>
-            </Grid.ColumnDefinitions>
-
-            <StackPanel Grid.Column="0">
-                <StackPanel Orientation="Horizontal">
-                    <Label>Weather ID:</Label>
-                    <Label Content="{Binding Model.WeatherID}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label>Weather Main:</Label>
-                    <Label Content="{Binding Model.WeatherMain}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label>Weather Description:</Label>
-                    <Label Content="{Binding Model.WeatherDescription}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label>Temperature:</Label>
-                    <Label Content="{Binding Model.Temperature}" ContentStringFormat="0.00 °C"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label>Felt temperature:</Label>
-                    <Label Content="{Binding Model.FeltTemperature}" ContentStringFormat="0.00 °C"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label>Min Temperature (day):</Label>
-                    <Label Content="{Binding Model.MinTemperature}" ContentStringFormat="0.00 °C"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label>Max temperature (day):</Label>
-                    <Label Content="{Binding Model.MaxTemperature}" ContentStringFormat="0.00 °C"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label>Pressure:</Label>
-                    <Label Content="{Binding Model.Pressure}" ContentStringFormat="0.### bar"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label>Humidity:</Label>
-                    <Label Content="{Binding Model.Humidity}" ContentStringFormat="0 %"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label>Visibility:</Label>
-                    <Label Content="{Binding Model.Visibility}"/>
-                </StackPanel>
+        <!-- Wrapper panel for all weather data elements -->
+        <StackPanel IsEnabled="{Binding ModelLoaded}">
+            <StackPanel Margin="0, 15, 0, 0" Orientation="Horizontal">
+                <Label>Latitude:</Label>
+                <Label Content="{Binding Model.Latitude}"/>
+                <Label Margin="20, 0, 0, 0">Longitude:</Label>
+                <Label Content="{Binding Model.Longitude}"/>
+                <Label Margin="20, 0, 0, 0">Name:</Label>
+                <Label Content="{Binding Model.Name}"/>
+                <Label Margin="20, 0, 0, 0">Country tag:</Label>
+                <Label Content="{Binding Model.CountryTag}"/>
+                <Label Margin="20, 0, 0, 0">City ID:</Label>
+                <Label Content="{Binding Model.CityID}"/>
             </StackPanel>
 
-            <Grid Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="5*"/>
-                    <RowDefinition Height="5*"/>
-                </Grid.RowDefinitions>
+            <Grid Margin="0, 15, 0, 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="5*"/>
+                </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Row="0">
+                <StackPanel Grid.Column="0">
                     <StackPanel Orientation="Horizontal">
-                        <Label>Wind speed:</Label>
-                        <Label Content="{Binding Model.WindSpeed}" ContentStringFormat="0.## m/s"/>
+                        <Label>Weather ID:</Label>
+                        <Label Content="{Binding Model.WeatherID}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Label>Wind direction (degrees):</Label>
-                        <TextBlock Text="{Binding Model.WindDegree, StringFormat=0 °, TargetNullValue=-}" VerticalAlignment="Center"/>
+                        <Label>Weather Main:</Label>
+                        <Label Content="{Binding Model.WeatherMain}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Label>Clouds:</Label>
-                        <Label Content="{Binding Model.CloudsAll}"/>
+                        <Label>Weather Description:</Label>
+                        <Label Content="{Binding Model.WeatherDescription}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label>Temperature:</Label>
+                        <Label Content="{Binding Model.Temperature}" ContentStringFormat="0.00 °C"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label>Felt temperature:</Label>
+                        <Label Content="{Binding Model.FeltTemperature}" ContentStringFormat="0.00 °C"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label>Min Temperature (day):</Label>
+                        <Label Content="{Binding Model.MinTemperature}" ContentStringFormat="0.00 °C"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label>Max temperature (day):</Label>
+                        <Label Content="{Binding Model.MaxTemperature}" ContentStringFormat="0.00 °C"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label>Pressure:</Label>
+                        <Label Content="{Binding Model.Pressure}" ContentStringFormat="0.### bar"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label>Humidity:</Label>
+                        <Label Content="{Binding Model.Humidity}" ContentStringFormat="0 %"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label>Visibility:</Label>
+                        <TextBlock Text="{Binding Model.Visibility, StringFormat=0.# m, TargetNullValue=-}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label>Rain last hour:</Label>
+                        <TextBlock Text="{Binding Model.RainOneHour, StringFormat=0.### mm/h, TargetNullValue=-}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label>Snow last hour:</Label>
+                        <TextBlock Text="{Binding Model.SnowOneHour, StringFormat=0.### mm/h, TargetNullValue=-}" VerticalAlignment="Center"/>
                     </StackPanel>
                 </StackPanel>
 
-                <StackPanel Grid.Row="1">
-                    <StackPanel Orientation="Horizontal">
-                        <Label>Data timestamp (UTC):</Label>
-                        <TextBlock Text="{Binding Model.DataTimestamp, StringFormat=dd.MM.yyyy HH:mm:ss}" VerticalAlignment="Center"/>
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5*"/>
+                        <RowDefinition Height="5*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0">
+                        <StackPanel Orientation="Horizontal">
+                            <Label>Wind speed:</Label>
+                            <Label Content="{Binding Model.WindSpeed}" ContentStringFormat="0.## m/s"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label>Wind direction (degrees):</Label>
+                            <TextBlock Text="{Binding Model.WindDegree, StringFormat=0 °, TargetNullValue=-}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label>Clouds:</Label>
+                            <Label Content="{Binding Model.CloudsAll}" ContentStringFormat="0 %"/>
+                        </StackPanel>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label>Sunrise (UTC):</Label>
-                        <TextBlock Text="{Binding Model.SunriseTimestamp, StringFormat=dd.MM.yyyy HH:mm:ss}" VerticalAlignment="Center"/>
+
+                    <StackPanel Grid.Row="1">
+                        <StackPanel Orientation="Horizontal">
+                            <Label>Data timestamp (UTC):</Label>
+                            <TextBlock Text="{Binding Model.DataTimestamp, StringFormat=dd.MM.yyyy HH:mm:ss}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label>Sunrise (UTC):</Label>
+                            <TextBlock Text="{Binding Model.SunriseTimestamp, StringFormat=dd.MM.yyyy HH:mm:ss}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label>Sunset (UTC):</Label>
+                            <TextBlock Text="{Binding Model.SunsetTimestamp, StringFormat=dd.MM.yyyy HH:mm:ss}" VerticalAlignment="Center"/>
+                        </StackPanel>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label>Sunset (UTC):</Label>
-                        <TextBlock Text="{Binding Model.SunsetTimestamp, StringFormat=dd.MM.yyyy HH:mm:ss}" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </StackPanel>
+                </Grid>
             </Grid>
-        </Grid>
+        </StackPanel>
     </StackPanel>
 </Window>

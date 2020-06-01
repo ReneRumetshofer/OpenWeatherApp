@@ -27,7 +27,9 @@ namespace WeatherAPITest.Model
         public double MaxTemperature { get; set; }
         public double Pressure { get; set; }
         public double Humidity { get; set; }
-        public double Visibility { get; set; }
+        public double? Visibility { get; set; }
+        public double? RainOneHour { get; set; } // in mm/h
+        public double? SnowOneHour { get; set; } // in mm/h
         public double WindSpeed { get; set; }
         public double? WindDegree { get; set; }
         public double CloudsAll { get; set; }
@@ -56,7 +58,9 @@ namespace WeatherAPITest.Model
                 MaxTemperature = double.Parse(json["main"]["temp_max"].ToString()),
                 Pressure = double.Parse(json["main"]["pressure"].ToString()),
                 Humidity = double.Parse(json["main"]["humidity"].ToString()),
-                Visibility = double.Parse(json["visibility"].ToString()),
+                Visibility = json["visibility"] != null ? double.Parse(json["visibility"].ToString()) : default(double?),
+                RainOneHour = json["rain"]?["1h"] != null ? double.Parse(json["rain"]["1h"].ToString()) : default(double?),
+                SnowOneHour = json["snow"]?["1h"] != null ? double.Parse(json["snow"]["1h"].ToString()) : default(double?),
                 WindSpeed = double.Parse(json["wind"]["speed"].ToString()),
                 WindDegree = json["wind"]["deg"] != null ? double.Parse(json["wind"]["deg"].ToString()) : default(double?),
                 CloudsAll = double.Parse(json["clouds"]["all"].ToString()),
@@ -76,6 +80,7 @@ namespace WeatherAPITest.Model
             MaxTemperature = MaxTemperature - CELSIUS_IN_KELVIN;
             Pressure = Pressure / 1000; // mbar to bars
             Humidity = Humidity / 100; // normalization
+            CloudsAll = CloudsAll / 100;
         }
 
     }
