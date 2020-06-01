@@ -3,7 +3,6 @@
 OpenWeather App is an weather application utilizing the [OpenWeatherMap](https://openweathermap.org/)
 
 ![OpenWeather App](/application_screenshot.png)
-Format: ![OpenWeather App screenshot](url)
 
 ## Getting Started
 
