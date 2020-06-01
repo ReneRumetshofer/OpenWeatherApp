@@ -29,16 +29,18 @@ namespace WeatherAPITest.Model
         public double Humidity { get; set; }
         public double Visibility { get; set; }
         public double WindSpeed { get; set; }
-        public double WindDegree { get; set; }
+        public double? WindDegree { get; set; }
         public double CloudsAll { get; set; }
         
-        public long DataTimestamp { get; set; }
-        public long SunriseTimestamp { get; set; }
-        public long SunsetTimestamp { get; set; }
+        public DateTime DataTimestamp { get; set; }
+        public DateTime SunriseTimestamp { get; set; }
+        public DateTime SunsetTimestamp { get; set; }
+
+        public const double CELSIUS_IN_KELVIN = 273.15;
 
         public static WeatherModel FromJson(JObject json)
         {
-            return new WeatherModel() { 
+            return new WeatherModel() {
                 Latitude = double.Parse(json["coord"]["lat"].ToString()),
                 Longitude = double.Parse(json["coord"]["lon"].ToString()),
                 Name = json["name"].ToString(),
@@ -56,13 +58,24 @@ namespace WeatherAPITest.Model
                 Humidity = double.Parse(json["main"]["humidity"].ToString()),
                 Visibility = double.Parse(json["visibility"].ToString()),
                 WindSpeed = double.Parse(json["wind"]["speed"].ToString()),
-                WindDegree = double.Parse(json["wind"]["deg"].ToString()),
+                WindDegree = json["wind"]["deg"] != null ? double.Parse(json["wind"]["deg"].ToString()) : default(double?),
                 CloudsAll = double.Parse(json["clouds"]["all"].ToString()),
 
-                DataTimestamp = long.Parse(json["dt"].ToString()),
-                SunriseTimestamp = long.Parse(json["sys"]["sunrise"].ToString()),
-                SunsetTimestamp = long.Parse(json["sys"]["sunset"].ToString())
+                DataTimestamp = DateTimeOffset.FromUnixTimeSeconds(long.Parse(json["dt"].ToString())).DateTime,
+                SunriseTimestamp = DateTimeOffset.FromUnixTimeSeconds(long.Parse(json["sys"]["sunrise"].ToString())).DateTime,
+                SunsetTimestamp = DateTimeOffset.FromUnixTimeSeconds(long.Parse(json["sys"]["sunset"].ToString())).DateTime
             };
+        }
+
+        // For example from Kelvin to °C
+        public void AdjustUnits()
+        {
+            Temperature = Temperature - CELSIUS_IN_KELVIN;
+            FeltTemperature = FeltTemperature - CELSIUS_IN_KELVIN;
+            MinTemperature = MinTemperature - CELSIUS_IN_KELVIN;
+            MaxTemperature = MaxTemperature - CELSIUS_IN_KELVIN;
+            Pressure = Pressure / 1000; // mbar to bars
+            Humidity = Humidity / 100; // normalization
         }
 
     }

@@ -28,6 +28,7 @@ namespace WeatherAPITest.ViewModel
 
             Console.WriteLine(JObject.Parse(response.Content));
             Model = WeatherModel.FromJson(JObject.Parse(response.Content));
+            Model.AdjustUnits();
         }
     }
 }
