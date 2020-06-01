@@ -1,5 +1,5 @@
 This project is licensed under the MIT license:
-=================================
+
 MIT License
 
 Copyright (c) 2020 Rene Rumetshofer
@@ -28,7 +28,8 @@ SOFTWARE.
 
 The application makes use of NuGet packages:
   - Fody 6.2.0 licensed under the MIT license
-=================================
+
+
 MIT License
 
 Copyright (c) Simon Cropp
@@ -50,13 +51,12 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-=================================
 
   - PropertyChanged.Fody 3.2.8 licensed under the MIT license
   - Newtonsoft.Json 12.0.3 licensed under the MIT license
   
   - RestSharp 106.11.4 licensed under the Apache 2.0 license (http://www.apache.org/licenses/LICENSE-2.0)
-=================================
+
 SPDX identifier
 Apache-2.0
 
@@ -158,4 +158,3 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 
 limitations under the License.
-=================================
