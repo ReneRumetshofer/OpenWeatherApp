@@ -14,6 +14,9 @@ using WeatherAPITest.Model;
 using System.Configuration;
 using System.Net;
 using System.Threading;
+using System.Windows;
+using WeatherAPITest.View;
+using System.Windows.Threading;
 
 namespace WeatherAPITest.ViewModel
 {
@@ -59,7 +62,15 @@ namespace WeatherAPITest.ViewModel
                 }
             });
 
-            // If city and country tag isset, then load
+            // TODO: Make asynchronous
+            // Check if an API key is set in Config
+            //if (ConfigurationManager.AppSettings["API key"] == null)
+            //{
+            //    APIKeyDialog akd = new APIKeyDialog(string.Empty);
+            //    akd.ShowDialog();
+            //}
+
+            // If city and country tag is set, then load
             if (CityName != null && CountryTag != null)
             {
                 LoadCity();
@@ -76,12 +87,21 @@ namespace WeatherAPITest.ViewModel
             string apiKey = ConfigurationManager.AppSettings["API key"];
             if (apiKey == null)
             {
-                ErrorText = "No API key set in App.config!";
+                // Prompt for key
+                APIKeyDialog akd = new APIKeyDialog(string.Empty);
+                akd.ShowDialog();
+
+                // Check if set after prompt
+                apiKey = ConfigurationManager.AppSettings["API key"];
+                if (apiKey == null || apiKey.Length == 0)
+                    ErrorText = "No API key set in App.config!";
+                else
+                    LoadCity();
             }
             else
             {
                 var client = new RestClient("http://api.openweathermap.org/data/2.5/");
-                var request = new RestRequest($"weather?q={CityName},{CountryTag}&appid={apiKey}", DataFormat.Json);
+                var request = new RestRequest($"weather?q={CityName},{CountryTag}&appid={apiKey}", RestSharp.DataFormat.Json);
                 var response = client.Get(request);
 
                 // City has been found (HTTP 200)
@@ -101,10 +121,19 @@ namespace WeatherAPITest.ViewModel
                         refreshTask.Start();
                 }
                 // City not found
-                else
+                else if(response.StatusCode == HttpStatusCode.NotFound)
                 {
                     ErrorText = "City and/or country could not be found!";
                     Model = null;
+                }
+                // Invalid API key
+                else if(response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    ErrorText = "Invalid API key!";
+
+                    MessageBox.Show("The API key in the App.config is invalid! Please change it in the next prompt.", "Invalid API key", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    APIKeyDialog akd = new APIKeyDialog(apiKey);
+                    akd.ShowDialog();
                 }
             }
         }

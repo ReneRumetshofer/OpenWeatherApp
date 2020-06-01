@@ -6,17 +6,18 @@
         xmlns:src="clr-namespace:WeatherAPITest.ViewModel"
         xmlns:local="clr-namespace:WeatherAPITest.View"
         mc:Ignorable="d"
-        Title="WeatherView" Height="450" Width="850">
+        Title="OpenWeather App" Height="450" Width="860"
+        Icon="pack://application:,,,/Icons/owa.ico">
     <Window.DataContext>
         <src:WeatherViewModel/>
     </Window.DataContext>
     <StackPanel>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
             <Label>City name:</Label>
-            <TextBox Text="{Binding CityName}" MinWidth="180" Height="20" VerticalContentAlignment="Center"/>
+            <TextBox Text="{Binding CityName, UpdateSourceTrigger=PropertyChanged}" MinWidth="180" Height="20" VerticalContentAlignment="Center" />
             <Label Margin="20, 0, 0, 0">Country tag:</Label>
-            <TextBox Text="{Binding CountryTag}" MinWidth="180" Height="20" VerticalContentAlignment="Center"/>
-            <Button Margin="20, 0, 0, 0" Content="Load" Command="{Binding LoadCommand}"/>
+            <TextBox Text="{Binding CountryTag, UpdateSourceTrigger=PropertyChanged}" MinWidth="180" Height="20" VerticalContentAlignment="Center"/>
+            <Button Margin="20, 0, 0, 0" Content="Load" Command="{Binding LoadCommand}" MinWidth="70"/>
             <Label Margin="20, 0, 0, 0" Content="{Binding ErrorText}" IsEnabled="{Binding ErrorTextEnabled}" Foreground="Red"/>
         </StackPanel>
 
