@@ -13,6 +13,7 @@ using System.Windows.Input;
 using WeatherAPITest.Model;
 using System.Configuration;
 using System.Net;
+using System.Threading;
 
 namespace WeatherAPITest.ViewModel
 {
@@ -27,6 +28,8 @@ namespace WeatherAPITest.ViewModel
         public bool ErrorTextEnabled => ErrorText != null && ErrorText != string.Empty && ErrorText != "";
         public WeatherModel Model{ get; set; }
         public bool ModelLoaded => Model != null;
+
+        private Task refreshTask;
         #endregion
 
         #region Commands
@@ -45,8 +48,19 @@ namespace WeatherAPITest.ViewModel
             CityName = ConfigurationManager.AppSettings["CityName"];
             CountryTag = ConfigurationManager.AppSettings["CountryTag"];
 
+            // Initialize refresh task
+            refreshTask = new Task(() =>
+            {
+                while (true)
+                {
+                    Thread.Sleep(5000);
+                    if (ModelLoaded && !ErrorTextEnabled)
+                        LoadCity();
+                }
+            });
+
             // If city and country tag isset, then load
-            if(CityName != null && CountryTag != null)
+            if (CityName != null && CountryTag != null)
             {
                 LoadCity();
             }
@@ -81,6 +95,10 @@ namespace WeatherAPITest.ViewModel
                     // Save city into config
                     AddConfigurationEntry("CityName", CityName);
                     AddConfigurationEntry("CountryTag", CountryTag);
+
+                    // Start refresher thread
+                    if (!refreshTask.Status.Equals(TaskStatus.Running))
+                        refreshTask.Start();
                 }
                 // City not found
                 else
