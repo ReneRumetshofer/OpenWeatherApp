@@ -108,17 +108,28 @@ namespace WeatherAPITest.ViewModel
                 if(response.StatusCode == HttpStatusCode.OK)
                 {
                     JObject responseJson = JObject.Parse(response.Content);
-                    Console.WriteLine(JObject.Parse(response.Content));
-                    Model = WeatherModel.FromJson(JObject.Parse(response.Content));
-                    Model.AdjustUnits();
+                    //Console.WriteLine(JObject.Parse(response.Content));
 
-                    // Save city into config
-                    AddConfigurationEntry("CityName", CityName);
-                    AddConfigurationEntry("CountryTag", CountryTag);
+                    // Parsing can throw exception, because not all cities have complete json attribute sets
+                    try
+                    {
+                        Model = WeatherModel.FromJson(JObject.Parse(response.Content));
+                        Model.AdjustUnits();
 
-                    // Start refresher thread
-                    if (!refreshTask.Status.Equals(TaskStatus.Running))
-                        refreshTask.Start();
+                        // Save city into config
+                        AddConfigurationEntry("CityName", CityName);
+                        AddConfigurationEntry("CountryTag", CountryTag);
+
+                        // Start refresher thread
+                        if (!refreshTask.Status.Equals(TaskStatus.Running))
+                            refreshTask.Start();
+                    }
+                    catch (Exception)
+                    {
+                        ErrorText = "Incomplete API response for this city!";
+                        MessageBox.Show($"The API response of the city {CityName}, {CountryTag} is incomplete and can't be parsed properly.", "Incomplete city response",
+                            MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
                 }
                 // City not found
                 else if(response.StatusCode == HttpStatusCode.NotFound)
