@@ -11,12 +11,16 @@
     <Window.DataContext>
         <src:WeatherViewModel/>
     </Window.DataContext>
+    <Window.InputBindings>
+        <KeyBinding Key="Return" Command="{Binding LoadCommand}"/>
+    </Window.InputBindings>
+    
     <StackPanel>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
             <Label>City name:</Label>
-            <TextBox Text="{Binding CityName, UpdateSourceTrigger=PropertyChanged}" MinWidth="180" Height="20" VerticalContentAlignment="Center" />
+            <TextBox Text="{Binding CityNameView, UpdateSourceTrigger=PropertyChanged}" MinWidth="180" Height="20" VerticalContentAlignment="Center" />
             <Label Margin="20, 0, 0, 0">Country tag:</Label>
-            <TextBox Text="{Binding CountryTag, UpdateSourceTrigger=PropertyChanged}" MinWidth="180" Height="20" VerticalContentAlignment="Center"/>
+            <TextBox Text="{Binding CountryTagView, UpdateSourceTrigger=PropertyChanged}" MinWidth="180" Height="20" VerticalContentAlignment="Center"/>
             <Button Margin="20, 0, 0, 0" Content="Load" Command="{Binding LoadCommand}" MinWidth="70"/>
             <Label Margin="20, 0, 0, 0" Content="{Binding ErrorText}" IsEnabled="{Binding ErrorTextEnabled}" Foreground="Red"/>
         </StackPanel>

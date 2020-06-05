@@ -25,8 +25,11 @@ namespace WeatherAPITest.ViewModel
         #region Properties
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public string CityNameView { get; set; } = string.Empty; // View binds to these properties to not interfere with the refreshing task
+        public string CountryTagView { get; set; } = string.Empty;
         public string CityName { get; set; } = string.Empty;
         public string CountryTag { get; set; } = string.Empty;
+
         public string ErrorText { get; set; } = string.Empty;
         public bool ErrorTextEnabled => ErrorText != null && ErrorText != string.Empty && ErrorText != "";
         public WeatherModel Model{ get; set; }
@@ -38,6 +41,9 @@ namespace WeatherAPITest.ViewModel
         #region Commands
         public ICommand LoadCommand => new RelayCommand((e) =>
         {
+            CityName = CityNameView;
+            CountryTag = CountryTagView;
+
             LoadCity();
         },
         (c) => true);
@@ -73,6 +79,8 @@ namespace WeatherAPITest.ViewModel
             // If city and country tag is set, then load
             if (CityName != null && CountryTag != null)
             {
+                CityNameView = CityName;
+                CountryTagView = CountryTag;
                 LoadCity();
             }
         }
