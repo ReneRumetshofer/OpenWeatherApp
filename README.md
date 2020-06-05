@@ -15,7 +15,8 @@ OpenWeather App requires .NET framework version 4.8
 
 ### Obtaining the application
 
-You can compile the application yourself (project for VisualStudio version 16 is provided) or use the "STABLE_1.0.0" release for x64.
+You can compile the application yourself (project for VisualStudio version 16 is provided) or use the "STABLE_1.0.1" release for x64.
+For installation, it is recommended to paste the application into AppData.
 
 ## License
 
