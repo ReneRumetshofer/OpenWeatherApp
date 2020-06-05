@@ -108,7 +108,7 @@ namespace WeatherAPITest.ViewModel
                 if(response.StatusCode == HttpStatusCode.OK)
                 {
                     JObject responseJson = JObject.Parse(response.Content);
-                    //Console.WriteLine(JObject.Parse(response.Content));
+                    Console.WriteLine(JObject.Parse(response.Content));
                     Model = WeatherModel.FromJson(JObject.Parse(response.Content));
                     Model.AdjustUnits();
 

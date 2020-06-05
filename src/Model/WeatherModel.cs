@@ -15,7 +15,7 @@ namespace WeatherAPITest.Model
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public string Name { get; set; }
-        public int CityID { get; set; }
+        public int? CityID { get; set; }
         public string CountryTag { get; set; }
 
         public int WeatherID { get; set; }
@@ -46,7 +46,7 @@ namespace WeatherAPITest.Model
                 Latitude = double.Parse(json["coord"]["lat"].ToString()),
                 Longitude = double.Parse(json["coord"]["lon"].ToString()),
                 Name = json["name"].ToString(),
-                CityID = int.Parse(json["sys"]["id"].ToString()),
+                CityID = json["sys"]["id"] != null ? int.Parse(json["sys"]["id"].ToString()) : default(int?),
                 CountryTag = json["sys"]["country"].ToString(),
 
                 WeatherID = int.Parse(json["weather"][0]["id"].ToString()),
