@@ -25,8 +25,11 @@ namespace WeatherAPITest.ViewModel
         #region Properties
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public string CityNameView { get; set; } = string.Empty; // View binds to these properties to not interfere with the refreshing task
+        public string CountryTagView { get; set; } = string.Empty;
         public string CityName { get; set; } = string.Empty;
         public string CountryTag { get; set; } = string.Empty;
+
         public string ErrorText { get; set; } = string.Empty;
         public bool ErrorTextEnabled => ErrorText != null && ErrorText != string.Empty && ErrorText != "";
         public WeatherModel Model{ get; set; }
@@ -38,6 +41,9 @@ namespace WeatherAPITest.ViewModel
         #region Commands
         public ICommand LoadCommand => new RelayCommand((e) =>
         {
+            CityName = CityNameView;
+            CountryTag = CountryTagView;
+
             LoadCity();
         },
         (c) => true);
@@ -73,6 +79,8 @@ namespace WeatherAPITest.ViewModel
             // If city and country tag is set, then load
             if (CityName != null && CountryTag != null)
             {
+                CityNameView = CityName;
+                CountryTagView = CountryTag;
                 LoadCity();
             }
         }
@@ -109,16 +117,27 @@ namespace WeatherAPITest.ViewModel
                 {
                     JObject responseJson = JObject.Parse(response.Content);
                     //Console.WriteLine(JObject.Parse(response.Content));
-                    Model = WeatherModel.FromJson(JObject.Parse(response.Content));
-                    Model.AdjustUnits();
 
-                    // Save city into config
-                    AddConfigurationEntry("CityName", CityName);
-                    AddConfigurationEntry("CountryTag", CountryTag);
+                    // Parsing can throw exception, because not all cities have complete json attribute sets
+                    try
+                    {
+                        Model = WeatherModel.FromJson(JObject.Parse(response.Content));
+                        Model.AdjustUnits();
 
-                    // Start refresher thread
-                    if (!refreshTask.Status.Equals(TaskStatus.Running))
-                        refreshTask.Start();
+                        // Save city into config
+                        AddConfigurationEntry("CityName", CityName);
+                        AddConfigurationEntry("CountryTag", CountryTag);
+
+                        // Start refresher thread
+                        if (!refreshTask.Status.Equals(TaskStatus.Running))
+                            refreshTask.Start();
+                    }
+                    catch (Exception)
+                    {
+                        ErrorText = "Incomplete API response for this city!";
+                        MessageBox.Show($"The API response of the city {CityName}, {CountryTag} is incomplete and can't be parsed properly.", "Incomplete city response",
+                            MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
                 }
                 // City not found
                 else if(response.StatusCode == HttpStatusCode.NotFound)
